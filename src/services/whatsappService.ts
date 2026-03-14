@@ -7,20 +7,21 @@ const { Client, LocalAuth } = pkg;
 // Initialize WhatsApp client with production-safe configuration
 const client = new Client({
   authStrategy: new LocalAuth({
+    clientId: "main-session",
     dataPath: "./sessions"
   }),
   puppeteer: {
     headless: true,
     timeout: 0,
     args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-accelerated-2d-canvas',
-      '--no-first-run',
-      '--no-zygote',
-      '--single-process',
-      '--disable-gpu'
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-accelerated-2d-canvas",
+      "--no-first-run",
+      "--no-zygote",
+      "--single-process",
+      "--disable-gpu"
     ],
   }
 });
@@ -66,6 +67,26 @@ export const whatsappService = {
    * Check if the WhatsApp client is ready
    */
   isReady: () => isClientReady,
+
+  /**
+   * Send a custom WhatsApp message to any number
+   */
+  sendCustomMessage: async (chatId: string, message: string) => {
+    if (!isClientReady) {
+      console.log("⚠️ Cannot send WhatsApp: Client is not ready");
+      return false;
+    }
+
+    try {
+      console.log(`📤 Attempting to send custom WhatsApp message to ${chatId}...`);
+      await client.sendMessage(chatId, message);
+      console.log(`✅ Custom WhatsApp message sent successfully to ${chatId}`);
+      return true;
+    } catch (error: any) {
+      console.log("❌ WhatsApp custom send failed:", error.message || error);
+      return false;
+    }
+  },
 
   /**
    * Send a WhatsApp message with shipment details

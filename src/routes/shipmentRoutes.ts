@@ -1,5 +1,5 @@
 import express from 'express';
-import { createShipment, trackShipment, updateShipmentStatus, getShipments, deleteShipment, getWhatsAppStatus } from '../controllers/shipmentController';
+import { createShipment, trackShipment, updateShipmentStatus, getShipments, deleteShipment, getWhatsAppStatus, sendWhatsAppMessage } from '../controllers/shipmentController';
 import { protect } from '../middleware/authMiddleware';
 
 const router = express.Router();
@@ -9,6 +9,8 @@ router.get('/whatsapp/status', protect, getWhatsAppStatus);
 router.route('/')
   .post(protect, createShipment)
   .get(protect, getShipments);
+
+router.post('/send-whatsapp', protect, sendWhatsAppMessage);
 
 router.route('/track/:id')
   .get(trackShipment); // Public

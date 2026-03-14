@@ -168,3 +168,40 @@ export const getWhatsAppStatus = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: 'Server Error', error: error.message });
   }
 };
+
+// @desc    Send custom WhatsApp message
+// @route   POST /api/shipments/send-whatsapp
+// @access  Private/Admin
+export const sendWhatsAppMessage = async (req: Request, res: Response) => {
+  try {
+    const { number, message } = req.body;
+
+    if (!number || !message) {
+      return res.status(400).json({ success: false, message: 'Please provide number and message' });
+    }
+
+    if (!whatsappService.isReady()) {
+      return res.status(503).json({ success: false, message: 'WhatsApp client is not ready' });
+    }
+
+    // Format number: should be 919876543210@c.us
+    let cleanPhone = number.replace(/\D/g, '');
+    if (cleanPhone.startsWith('0')) cleanPhone = cleanPhone.substring(1);
+    if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
+    
+    const chatId = cleanPhone + "@c.us";
+
+    // Since we don't export 'client' directly, we can add a method to whatsappService
+    // or use a temporary hack if we can't modify the service easily.
+    // I'll add 'sendMessage' to whatsappService.
+    const sent = await whatsappService.sendCustomMessage(chatId, message);
+
+    if (sent) {
+      res.status(200).json({ success: true, message: 'WhatsApp message sent' });
+    } else {
+      res.status(500).json({ success: false, message: 'Failed to send message' });
+    }
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+  }
+};
