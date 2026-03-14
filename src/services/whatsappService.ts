@@ -4,18 +4,14 @@ import { IShipment } from "../models/Shipment";
 
 const { Client, LocalAuth } = pkg;
 
-// Diagnostic logs for Puppeteer on Render
-console.log("🔍 Puppeteer Environment Check:");
-console.log("- NODE_ENV:", process.env.NODE_ENV);
-console.log("- PUPPETEER_CACHE_DIR:", process.env.PUPPETEER_CACHE_DIR);
-console.log("- __dirname:", __dirname);
-
-// Initialize WhatsApp client
+// Initialize WhatsApp client with production-safe configuration
 const client = new Client({
-  authStrategy: new LocalAuth(),
+  authStrategy: new LocalAuth({
+    dataPath: "./sessions"
+  }),
   puppeteer: {
-    handleSIGINT: false,
     headless: true,
+    timeout: 0,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
@@ -52,6 +48,10 @@ client.on("auth_failure", (msg) => {
 client.on("disconnected", (reason) => {
   isClientReady = false;
   console.error("❌ WhatsApp client DISCONNECTED:", reason);
+  console.log("🔄 Attempting to reconnect...");
+  client.initialize().catch(err => {
+    console.error("❌ Reconnection initialization failed:", err);
+  });
 });
 
 client.initialize().catch(err => {
