@@ -21,7 +21,7 @@ const client = new Client({
     ],
     // If we're on Render, we might need a specific path, but let Puppeteer try to find the installed one first
     // unless it fails. The build command now installs it.
-    executablePath: process.env.CHROME_PATH || undefined, 
+    executablePath: process.env.CHROME_PATH || undefined,
   }
 });
 

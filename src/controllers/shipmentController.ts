@@ -43,9 +43,9 @@ import { notificationService } from '../services/notificationService';
 // @access  Private/Admin
 export const createShipment = async (req: Request, res: Response) => {
   try {
-    const { 
-      trackingId, customerName, customerPhone, origin, destination, 
-      estimatedDelivery, quoteId, driverName, driverPhone, vehicleNumber 
+    const {
+      trackingId, customerName, customerPhone, origin, destination,
+      estimatedDelivery, quoteId, driverName, driverPhone, vehicleNumber
     } = req.body;
 
     const newShipment = await Shipment.create({
@@ -120,7 +120,7 @@ export const updateShipmentStatus = async (req: Request, res: Response) => {
     }
 
     if (currentStatus) shipment.currentStatus = currentStatus;
-    
+
     // Add new update to tracking history
     if (location && status) {
       shipment.updates.push({
@@ -146,10 +146,10 @@ import { whatsappService } from '../services/whatsappService';
 export const getWhatsAppStatus = async (req: Request, res: Response) => {
   try {
     const isReady = whatsappService.isReady();
-    res.status(200).json({ 
-      success: true, 
-      isReady, 
-      message: isReady ? 'WhatsApp client is connected' : 'WhatsApp client is not connected' 
+    res.status(200).json({
+      success: true,
+      isReady,
+      message: isReady ? 'WhatsApp client is connected' : 'WhatsApp client is not connected'
     });
   } catch (error: any) {
     res.status(500).json({ success: false, message: 'Server Error', error: error.message });

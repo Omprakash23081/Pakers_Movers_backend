@@ -1,26 +1,24 @@
-2026/03/14-18:14:54.800 4770 Reusing MANIFEST H:\Surbh_Bhiya\RajPackersMovers\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2026/03/14-18:14:54.985 4770 Recovering log #549
-2026/03/14-18:14:55.465 4770 Reusing old log H:\Surbh_Bhiya\RajPackersMovers\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000549.log 
-2026/03/14-18:14:55.468 4770 Delete type=2 #554
-2026/03/14-18:14:55.468 4770 Delete type=2 #555
-2026/03/14-18:14:55.469 4770 Delete type=2 #556
-2026/03/14-18:14:58.344 27f8 Compacting 1@1 + 8@2 files
-2026/03/14-18:14:59.272 27f8 Generated table #555@1: 13229 keys, 2136081 bytes
-2026/03/14-18:14:59.724 27f8 Generated table #556@1: 102630 keys, 2254424 bytes
-2026/03/14-18:15:00.662 27f8 Generated table #557@1: 95208 keys, 2245168 bytes
-2026/03/14-18:15:02.548 27f8 Generated table #558@1: 51883 keys, 2230962 bytes
-2026/03/14-18:15:03.909 27f8 Generated table #559@1: 34917 keys, 2195022 bytes
-2026/03/14-18:15:04.643 27f8 Generated table #560@1: 8906 keys, 2174251 bytes
-2026/03/14-18:15:05.913 27f8 Generated table #561@1: 37697 keys, 2214472 bytes
-2026/03/14-18:15:06.222 27f8 Generated table #562@1: 11237 keys, 644060 bytes
-2026/03/14-18:15:06.222 27f8 Compacted 1@1 + 8@2 files => 16094440 bytes
-2026/03/14-18:15:06.281 27f8 compacted to: files[ 0 0 8 0 0 0 0 ]
-2026/03/14-18:15:06.282 27f8 Delete type=2 #532
-2026/03/14-18:15:06.282 27f8 Delete type=2 #536
-2026/03/14-18:15:06.282 27f8 Delete type=2 #539
-2026/03/14-18:15:06.282 27f8 Delete type=2 #540
-2026/03/14-18:15:06.282 27f8 Delete type=2 #543
-2026/03/14-18:15:06.282 27f8 Delete type=2 #544
-2026/03/14-18:15:06.283 27f8 Delete type=2 #551
-2026/03/14-18:15:06.283 27f8 Delete type=2 #552
-2026/03/14-18:15:06.283 27f8 Delete type=2 #553
+2026/03/14-18:28:17.891 48e0 Reusing MANIFEST H:\Surbh_Bhiya\RajPackersMovers\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/03/14-18:28:17.892 48e0 Recovering log #564
+2026/03/14-18:28:19.256 48e0 Reusing old log H:\Surbh_Bhiya\RajPackersMovers\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000564.log 
+2026/03/14-18:28:40.415 48e0 Level-0 table #576: started
+2026/03/14-18:28:40.877 48e0 Level-0 table #576: 1174887 bytes OK
+2026/03/14-18:28:41.068 48e0 Delete type=0 #564
+2026/03/14-18:28:44.547 4984 Compacting 1@1 + 7@2 files
+2026/03/14-18:28:45.591 4984 Generated table #577@1: 29987 keys, 2155251 bytes
+2026/03/14-18:28:46.505 4984 Generated table #578@1: 109687 keys, 2263395 bytes
+2026/03/14-18:28:47.600 4984 Generated table #579@1: 81545 keys, 2263470 bytes
+2026/03/14-18:28:48.040 4984 Generated table #580@1: 50334 keys, 2210492 bytes
+2026/03/14-18:28:49.403 4984 Generated table #581@1: 17435 keys, 2161978 bytes
+2026/03/14-18:28:49.858 4984 Generated table #582@1: 16694 keys, 2198400 bytes
+2026/03/14-18:28:50.195 4984 Generated table #583@1: 38546 keys, 1952713 bytes
+2026/03/14-18:28:50.195 4984 Compacted 1@1 + 7@2 files => 15205699 bytes
+2026/03/14-18:28:50.210 4984 compacted to: files[ 0 0 8 0 0 0 0 ]
+2026/03/14-18:28:50.210 4984 Delete type=2 #566
+2026/03/14-18:28:50.211 4984 Delete type=2 #567
+2026/03/14-18:28:50.211 4984 Delete type=2 #568
+2026/03/14-18:28:50.211 4984 Delete type=2 #569
+2026/03/14-18:28:50.211 4984 Delete type=2 #570
+2026/03/14-18:28:50.212 4984 Delete type=2 #571
+2026/03/14-18:28:50.212 4984 Delete type=2 #572
+2026/03/14-18:28:50.212 4984 Delete type=2 #576

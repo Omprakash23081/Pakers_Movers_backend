@@ -14,6 +14,9 @@ import pricingRoutes from './routes/pricingRoutes';
 
 dotenv.config();
 
+console.log("server is running");
+
+
 const app: Express = express();
 const PORT = process.env.PORT || 5000;
 
