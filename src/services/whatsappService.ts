@@ -1,5 +1,6 @@
 import pkg from "whatsapp-web.js";
 import qrcode from "qrcode-terminal";
+import QRCode from "qrcode";
 import { IShipment } from "../models/Shipment";
 
 const { Client, LocalAuth } = pkg;
@@ -26,14 +27,23 @@ const client = new Client({
   }
 });
 
-// Flag to track client readiness
+// Flag to track client readiness and store latest QR
 let isClientReady = false;
+let latestQRCodeDataURL: string | null = null;
 
-client.on("qr", (qr) => {
+client.on("qr", async (qr) => {
   console.log("=========================================");
   console.log("📢 SCAN QR CODE FOR WHATSAPP SESSION:");
   console.log("=========================================");
   qrcode.generate(qr, { small: true });
+  
+  try {
+    // Also generate a DataURL for browser display
+    latestQRCodeDataURL = await QRCode.toDataURL(qr);
+    console.log("✅ QR Code DataURL generated for browser access");
+  } catch (err) {
+    console.error("❌ Failed to generate QR DataURL:", err);
+  }
 });
 
 client.on("ready", () => {
@@ -63,6 +73,11 @@ client.initialize().catch(err => {
  * Service to handle automated WhatsApp notifications
  */
 export const whatsappService = {
+  /**
+   * Get the latest QR Code Data URL
+   */
+  getLatestQR: () => latestQRCodeDataURL,
+
   /**
    * Check if the WhatsApp client is ready
    */

@@ -205,3 +205,61 @@ export const sendWhatsAppMessage = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: 'Server Error', error: error.message });
   }
 };
+
+// @desc    Get latest WhatsApp QR code for browser scanning
+// @route   GET /api/shipments/qr
+// @access  Public (Manual access for scanning)
+export const getQRCode = async (req: Request, res: Response) => {
+  try {
+    const qrDataURL = whatsappService.getLatestQR();
+    
+    if (!qrDataURL) {
+      if (whatsappService.isReady()) {
+        return res.status(200).send(`
+          <html>
+            <body style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; font-family:sans-serif; background:#f0f2f5;">
+              <div style="background:white; padding:40px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); text-align:center;">
+                <h1 style="color:#25d366;">✅ WhatsApp Ready</h1>
+                <p>The client is already connected and authenticated.</p>
+              </div>
+            </body>
+          </html>
+        `);
+      }
+      return res.status(404).send(`
+        <html>
+          <body style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; font-family:sans-serif; background:#f0f2f5;">
+            <div style="background:white; padding:40px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); text-align:center;">
+              <h1 style="color:#ea4335;">⏳ QR Code Not Ready</h1>
+              <p>The WhatsApp client is still initializing or waiting for a new QR code.</p>
+              <p>Please refresh this page in a few seconds.</p>
+              <script>setTimeout(() => location.reload(), 5000);</script>
+            </div>
+          </body>
+        </html>
+      `);
+    }
+
+    res.status(200).send(`
+      <html>
+        <body style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; font-family:sans-serif; background:#f0f2f5; margin:0;">
+          <div style="background:white; padding:40px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); text-align:center;">
+            <h1 style="color:#25d366; margin-bottom:10px;">SSD Packers & Movers</h1>
+            <h2 style="margin-top:0; color:#54656f;">WhatsApp Session Scan</h2>
+            <p style="color:#54656f;">Open WhatsApp on your phone and scan this code:</p>
+            <div style="margin:30px 0; padding:10px; border:1px solid #e1e9eb; display:inline-block; background:white;">
+              <img src="\${qrDataURL}" alt="WhatsApp QR Code" />
+            </div>
+            <p style="font-size:14px; color:#8696a0;">This QR code will update automatically when a new session is requested.</p>
+            <script>
+              // Auto refresh every 30 seconds to catch new QR codes
+              setTimeout(() => location.reload(), 30000);
+            </script>
+          </div>
+        </body>
+      </html>
+    `);
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+  }
+};
