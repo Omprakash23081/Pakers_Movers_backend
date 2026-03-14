@@ -137,3 +137,21 @@ export const updateShipmentStatus = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: 'Server Error', error: error.message });
   }
 };
+
+import { whatsappService } from '../services/whatsappService';
+
+// @desc    Get WhatsApp client status
+// @route   GET /api/shipments/whatsapp/status
+// @access  Private/Admin
+export const getWhatsAppStatus = async (req: Request, res: Response) => {
+  try {
+    const isReady = whatsappService.isReady();
+    res.status(200).json({ 
+      success: true, 
+      isReady, 
+      message: isReady ? 'WhatsApp client is connected' : 'WhatsApp client is not connected' 
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+  }
+};

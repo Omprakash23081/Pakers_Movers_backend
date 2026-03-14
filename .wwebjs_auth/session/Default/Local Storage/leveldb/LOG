@@ -1,3 +1,6 @@
-2026/03/14-14:19:18.343 4a68 Reusing MANIFEST H:\Surbh_Bhiya\RajPackersMovers\backend\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
-2026/03/14-14:19:18.355 4a68 Recovering log #4
-2026/03/14-14:19:18.435 4a68 Reusing old log H:\Surbh_Bhiya\RajPackersMovers\backend\.wwebjs_auth\session\Default\Local Storage\leveldb/000004.log 
+2026/03/14-18:20:18.377 311c Reusing MANIFEST H:\Surbh_Bhiya\RajPackersMovers\backend\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
+2026/03/14-18:20:18.416 311c Recovering log #4
+2026/03/14-18:20:18.467 311c Reusing old log H:\Surbh_Bhiya\RajPackersMovers\backend\.wwebjs_auth\session\Default\Local Storage\leveldb/000004.log 
+2026/03/14-18:22:33.337 3fb8 Level-0 table #7: started
+2026/03/14-18:22:33.540 3fb8 Level-0 table #7: 13586 bytes OK
+2026/03/14-18:22:33.572 3fb8 Delete type=0 #4
