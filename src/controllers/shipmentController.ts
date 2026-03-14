@@ -8,7 +8,7 @@ import QuoteRequest from '../models/QuoteRequest';
 export const getShipments = async (req: Request, res: Response) => {
   try {
     const { includeDeleted } = req.query;
-    const filter = includeDeleted === 'true' ? {} : { isDeleted: false };
+    const filter = includeDeleted === 'true' ? {} : { isDeleted: { $ne: true } };
     const shipments = await Shipment.find(filter).sort({ createdAt: -1 });
     res.status(200).json({ success: true, count: shipments.length, data: shipments });
   } catch (error: any) {
@@ -33,10 +33,17 @@ export const deleteShipment = async (req: Request, res: Response) => {
       return res.status(200).json({ success: true, message: 'Shipment permanently deleted' });
     }
 
-    shipment.isDeleted = true;
-    await shipment.save();
+    const updatedShipment = await Shipment.findByIdAndUpdate(
+      req.params.id,
+      { isDeleted: true },
+      { new: true }
+    );
 
-    res.status(200).json({ success: true, message: 'Shipment moved to history', data: shipment });
+    if (!updatedShipment) {
+      return res.status(404).json({ success: false, message: 'Shipment not found' });
+    }
+
+    res.status(200).json({ success: true, message: 'Shipment moved to history', data: updatedShipment });
   } catch (error: any) {
     res.status(500).json({ success: false, message: 'Server Error', error: error.message });
   }

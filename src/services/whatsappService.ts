@@ -91,17 +91,40 @@ export const whatsappService = {
 
     const number = cleanPhone + "@c.us";
 
-    const message =
-      `🚚 *Shipment Created Successfully*\n\n` +
-      `Hello ${shipment.customerName},\n\n` +
-      `Your shipment has been registered with SSD Packers & Movers.\n\n` +
-      `📦 *Tracking ID:* ${shipment.trackingId}\n` +
-      `📍 *From:* ${shipment.origin}\n` +
-      `🏁 *To:* ${shipment.destination}\n` +
-      `👤 *Driver:* ${shipment.driverName || 'Assigned'} (${shipment.driverPhone || 'N/A'})\n` +
-      `🚛 *Vehicle:* ${shipment.vehicleNumber || 'N/A'}\n\n` +
-      `🔗 *Track Live Status:* \nhttps://pakers-movers.netlify.app/track?id=${shipment.trackingId}\n\n` +
-      `Thank you for trust in SSD!`;
+   const message =
+`🚚 *SSD Packers & Movers*
+
+━━━━━━━━━━━━━━━
+✅ *Shipment Confirmed*
+━━━━━━━━━━━━━━━
+
+Hello *${shipment.customerName}* 👋
+
+Your shipment has been successfully created and is now being processed.
+
+📦 *Tracking Details*
+• *Tracking ID:* ${shipment.trackingId}
+
+📍 *Pickup Location*  
+${shipment.origin}
+
+🏁 *Delivery Location*  
+${shipment.destination}
+
+🚛 *Transport Information*
+• *Driver:* ${shipment.driverName || 'To be assigned'}
+• *Contact:* ${shipment.driverPhone || 'Will be updated soon'}
+• *Vehicle:* ${shipment.vehicleNumber || 'Pending'}
+
+━━━━━━━━━━━━━━━
+🔎 *Track Your Shipment*
+https://pakers-movers.netlify.app/track?id=${shipment.trackingId}
+━━━━━━━━━━━━━━━
+
+Thank you for choosing  
+*SSD Packers & Movers* 🙏
+
+We will keep you updated on your shipment status.`;
 
     try {
       console.log(`📤 Attempting to send WhatsApp message to ${number}...`);
