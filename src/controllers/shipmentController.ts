@@ -16,15 +16,21 @@ export const getShipments = async (req: Request, res: Response) => {
   }
 };
 
-// @desc    Soft Delete Shipment (Move to history)
+// @desc    Soft Delete or Permanent Delete Shipment
 // @route   DELETE /api/shipments/:id
 // @access  Private/Admin
 export const deleteShipment = async (req: Request, res: Response) => {
   try {
+    const { permanent } = req.query;
     const shipment = await Shipment.findById(req.params.id);
 
     if (!shipment) {
       return res.status(404).json({ success: false, message: 'Shipment not found' });
+    }
+
+    if (permanent === 'true') {
+      await Shipment.findByIdAndDelete(req.params.id);
+      return res.status(200).json({ success: true, message: 'Shipment permanently deleted' });
     }
 
     shipment.isDeleted = true;
