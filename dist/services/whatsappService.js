@@ -23,9 +23,8 @@ const client = new Client({
             "--disable-dev-shm-usage",
             "--disable-accelerated-2d-canvas",
             "--no-first-run",
-            "--no-zygote",
-            "--single-process",
-            "--disable-gpu"
+            "--disable-gpu",
+            "--disable-extensions"
         ],
     }
 });
@@ -50,6 +49,8 @@ client.on("qr", async (qr) => {
 });
 client.on("ready", () => {
     isClientReady = true;
+    latestQRCode = null;
+    latestQRCodeDataURL = null;
     console.log("✅ WhatsApp client is READY and CONNECTED");
 });
 client.on("auth_failure", (msg) => {
