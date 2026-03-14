@@ -5,7 +5,6 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 
-// Route Imports
 import authRoutes from './routes/authRoutes';
 import quoteRoutes from './routes/quoteRoutes';
 import shipmentRoutes from './routes/shipmentRoutes';
@@ -25,7 +24,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// API Routes
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/quotes', quoteRoutes);
 app.use('/api/shipments', shipmentRoutes);
@@ -33,16 +32,32 @@ app.use('/api/stats', statsRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/pricing', pricingRoutes);
 
-// Basic Route
+// Root route
 app.get('/', (req: Request, res: Response) => {
     res.send('SSD Packers & Movers API is running...');
 });
 
-// Database Connection + Server Start
+// Health check
+app.get('/health', (req: Request, res: Response) => {
+    res.status(200).json({ status: 'OK' });
+});
+
+// Error protection
+process.on('unhandledRejection', (err) => {
+    console.error('Unhandled Rejection:', err);
+});
+
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+});
+
+// Start server
 const startServer = async () => {
     try {
 
-        await mongoose.connect(process.env.MONGODB_URI as string);
+        await mongoose.connect(process.env.MONGODB_URI as string, {
+            autoIndex: false
+        });
 
         console.log('MongoDB Connected');
 
