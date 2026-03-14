@@ -1,24 +1,95 @@
-2026/03/14-18:30:00.138 13ec Reusing MANIFEST H:\Surbh_Bhiya\RajPackersMovers\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2026/03/14-18:30:00.139 13ec Recovering log #575
-2026/03/14-18:30:00.141 13ec Reusing old log H:\Surbh_Bhiya\RajPackersMovers\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000575.log 
-2026/03/14-18:30:21.021 100 Level-0 table #586: started
-2026/03/14-18:30:21.156 100 Level-0 table #586: 1011565 bytes OK
-2026/03/14-18:30:21.276 100 Delete type=0 #575
-2026/03/14-18:30:21.316 13ec Compacting 1@1 + 7@2 files
-2026/03/14-18:30:22.326 13ec Generated table #587@1: 23979 keys, 2149050 bytes
-2026/03/14-18:30:23.213 13ec Generated table #588@1: 109591 keys, 2263062 bytes
-2026/03/14-18:30:23.914 13ec Generated table #589@1: 88373 keys, 2265894 bytes
-2026/03/14-18:30:24.544 13ec Generated table #590@1: 48142 keys, 2219168 bytes
-2026/03/14-18:30:24.991 13ec Generated table #591@1: 23499 keys, 2172617 bytes
-2026/03/14-18:30:25.203 13ec Generated table #592@1: 12284 keys, 2208891 bytes
-2026/03/14-18:30:25.831 13ec Generated table #593@1: 43130 keys, 2157362 bytes
-2026/03/14-18:30:25.832 13ec Compacted 1@1 + 7@2 files => 15436044 bytes
-2026/03/14-18:30:25.851 13ec compacted to: files[ 0 0 8 0 0 0 0 ]
-2026/03/14-18:30:25.853 13ec Delete type=2 #577
-2026/03/14-18:30:25.853 13ec Delete type=2 #578
-2026/03/14-18:30:25.853 13ec Delete type=2 #579
-2026/03/14-18:30:25.853 13ec Delete type=2 #580
-2026/03/14-18:30:25.853 13ec Delete type=2 #581
-2026/03/14-18:30:25.853 13ec Delete type=2 #582
-2026/03/14-18:30:25.854 13ec Delete type=2 #583
-2026/03/14-18:30:25.854 13ec Delete type=2 #586
+2026/03/15-01:53:35.917 994 Reusing MANIFEST H:\Surbh_Bhiya\RajPackersMovers\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/03/15-01:53:37.009 994 Recovering log #585
+2026/03/15-01:53:42.704 994 Reusing old log H:\Surbh_Bhiya\RajPackersMovers\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000585.log 
+2026/03/15-01:54:45.466 4454 Level-0 table #596: started
+2026/03/15-01:54:45.794 4454 Level-0 table #596: 1063649 bytes OK
+2026/03/15-01:54:46.003 4454 Delete type=0 #585
+2026/03/15-01:54:46.506 53a8 Compacting 1@1 + 8@2 files
+2026/03/15-01:54:48.295 53a8 Level-0 table #599: started
+2026/03/15-01:54:48.709 53a8 Level-0 table #599: 890751 bytes OK
+2026/03/15-01:54:48.836 53a8 Delete type=0 #595
+2026/03/15-01:54:50.978 53a8 Level-0 table #601: started
+2026/03/15-01:54:51.486 53a8 Level-0 table #601: 837046 bytes OK
+2026/03/15-01:54:51.662 53a8 Delete type=0 #598
+2026/03/15-01:55:04.719 53a8 Level-0 table #603: started
+2026/03/15-01:55:05.488 53a8 Level-0 table #603: 860039 bytes OK
+2026/03/15-01:55:05.634 53a8 Delete type=0 #600
+2026/03/15-01:55:06.495 53a8 Generated table #597@1: 28640 keys, 2154197 bytes
+2026/03/15-01:55:08.251 53a8 Generated table #604@1: 109635 keys, 2262304 bytes
+2026/03/15-01:55:13.458 53a8 Generated table #605@1: 85675 keys, 2268386 bytes
+2026/03/15-01:55:17.869 53a8 Level-0 table #608: started
+2026/03/15-01:55:18.184 53a8 Level-0 table #608: 933739 bytes OK
+2026/03/15-01:55:18.289 53a8 Delete type=0 #602
+2026/03/15-01:55:19.299 53a8 Level-0 table #610: started
+2026/03/15-01:55:19.421 53a8 Level-0 table #610: 793302 bytes OK
+2026/03/15-01:55:19.522 53a8 Delete type=0 #607
+2026/03/15-01:55:21.113 53a8 Level-0 table #612: started
+2026/03/15-01:55:21.429 53a8 Level-0 table #612: 949624 bytes OK
+2026/03/15-01:55:21.622 53a8 Delete type=0 #609
+2026/03/15-01:55:22.665 53a8 Generated table #606@1: 48583 keys, 2209179 bytes
+2026/03/15-01:55:24.186 53a8 Level-0 table #615: started
+2026/03/15-01:55:24.401 53a8 Level-0 table #615: 829671 bytes OK
+2026/03/15-01:55:24.590 53a8 Delete type=0 #611
+2026/03/15-01:55:25.330 53a8 Level-0 table #617: started
+2026/03/15-01:55:25.831 53a8 Level-0 table #617: 733888 bytes OK
+2026/03/15-01:55:25.895 53a8 Delete type=0 #614
+2026/03/15-01:55:26.947 53a8 Level-0 table #619: started
+2026/03/15-01:55:27.157 53a8 Level-0 table #619: 978702 bytes OK
+2026/03/15-01:55:27.255 53a8 Delete type=0 #616
+2026/03/15-01:55:33.899 53a8 Level-0 table #621: started
+2026/03/15-01:55:34.056 53a8 Level-0 table #621: 977332 bytes OK
+2026/03/15-01:55:34.149 53a8 Delete type=0 #618
+2026/03/15-01:55:34.249 53a8 Generated table #613@1: 21288 keys, 2174778 bytes
+2026/03/15-01:55:34.404 53a8 Level-0 table #624: started
+2026/03/15-01:55:34.571 53a8 Level-0 table #624: 1169829 bytes OK
+2026/03/15-01:55:34.665 53a8 Delete type=0 #620
+2026/03/15-01:55:42.198 53a8 Generated table #622@1: 12379 keys, 2189893 bytes
+2026/03/15-01:55:45.320 53a8 Generated table #625@1: 44738 keys, 2195804 bytes
+2026/03/15-01:55:45.320 53a8 Compacted 1@1 + 8@2 files => 15454541 bytes
+2026/03/15-01:55:45.456 53a8 compacted to: files[ 11 0 7 0 0 0 0 ]
+2026/03/15-01:55:45.458 53a8 Delete type=2 #573
+2026/03/15-01:55:45.458 53a8 Delete type=2 #587
+2026/03/15-01:55:45.458 53a8 Delete type=2 #588
+2026/03/15-01:55:45.459 53a8 Delete type=2 #589
+2026/03/15-01:55:45.459 53a8 Delete type=2 #590
+2026/03/15-01:55:45.460 53a8 Delete type=2 #591
+2026/03/15-01:55:45.460 53a8 Delete type=2 #592
+2026/03/15-01:55:45.460 53a8 Delete type=2 #593
+2026/03/15-01:55:45.460 53a8 Delete type=2 #596
+2026/03/15-01:55:45.463 53a8 Compacting 11@0 + 0@1 files
+2026/03/15-01:55:50.631 53a8 Generated table #626@0: 122046 keys, 2289053 bytes
+2026/03/15-01:55:51.031 53a8 Generated table #627@0: 1468 keys, 63184 bytes
+2026/03/15-01:55:51.031 53a8 Compacted 11@0 + 0@1 files => 2352237 bytes
+2026/03/15-01:55:51.280 53a8 compacted to: files[ 0 2 7 0 0 0 0 ]
+2026/03/15-01:55:51.283 53a8 Delete type=2 #599
+2026/03/15-01:55:51.284 53a8 Delete type=2 #601
+2026/03/15-01:55:51.284 53a8 Delete type=2 #603
+2026/03/15-01:55:51.352 53a8 Delete type=2 #608
+2026/03/15-01:55:51.352 53a8 Delete type=2 #610
+2026/03/15-01:55:51.352 53a8 Delete type=2 #612
+2026/03/15-01:55:51.353 53a8 Delete type=2 #615
+2026/03/15-01:55:51.353 53a8 Delete type=2 #617
+2026/03/15-01:55:51.353 53a8 Delete type=2 #619
+2026/03/15-01:55:51.353 53a8 Delete type=2 #621
+2026/03/15-01:55:51.353 53a8 Delete type=2 #624
+2026/03/15-01:55:57.141 4454 Expanding@1 1+7 (2289053+15454541 bytes) to 2+7 (2352237+15454541 bytes)
+2026/03/15-01:55:57.141 4454 Compacting 2@1 + 7@2 files
+2026/03/15-01:56:07.967 4454 Generated table #628@1: 14016 keys, 2138160 bytes
+2026/03/15-01:56:09.313 4454 Generated table #629@1: 100712 keys, 2250406 bytes
+2026/03/15-01:56:10.364 4454 Generated table #630@1: 94797 keys, 2244595 bytes
+2026/03/15-01:56:11.741 4454 Generated table #631@1: 54317 keys, 2244912 bytes
+2026/03/15-01:56:12.941 4454 Generated table #632@1: 42004 keys, 2203190 bytes
+2026/03/15-01:56:13.843 4454 Generated table #633@1: 7652 keys, 2167884 bytes
+2026/03/15-01:56:15.613 4454 Generated table #634@1: 38065 keys, 2222638 bytes
+2026/03/15-01:56:15.845 4454 Generated table #635@1: 11911 keys, 712811 bytes
+2026/03/15-01:56:15.846 4454 Compacted 2@1 + 7@2 files => 16184596 bytes
+2026/03/15-01:56:15.921 4454 compacted to: files[ 0 0 8 0 0 0 0 ]
+2026/03/15-01:56:15.921 4454 Delete type=2 #597
+2026/03/15-01:56:15.921 4454 Delete type=2 #604
+2026/03/15-01:56:15.921 4454 Delete type=2 #605
+2026/03/15-01:56:15.921 4454 Delete type=2 #606
+2026/03/15-01:56:15.922 4454 Delete type=2 #613
+2026/03/15-01:56:15.922 4454 Delete type=2 #622
+2026/03/15-01:56:15.923 4454 Delete type=2 #625
+2026/03/15-01:56:15.923 4454 Delete type=2 #626
+2026/03/15-01:56:15.923 4454 Delete type=2 #627

@@ -9,6 +9,7 @@ const client = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
     handleSIGINT: false,
+    headless: true,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
@@ -16,12 +17,9 @@ const client = new Client({
       '--disable-accelerated-2d-canvas',
       '--no-first-run',
       '--no-zygote',
-      '--single-process', // <- this one element is important for some cloud platforms
+      '--single-process',
       '--disable-gpu'
     ],
-    // If we're on Render, we might need a specific path, but let Puppeteer try to find the installed one first
-    // unless it fails. The build command now installs it.
-    executablePath: process.env.CHROME_PATH || undefined,
   }
 });
 
