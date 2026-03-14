@@ -45,10 +45,10 @@ export const getQuoteRequests = async (req: Request, res: Response) => {
 export const updateQuoteStatus = async (req: Request, res: Response) => {
   try {
     const { status } = req.body;
-    
+
     const quote = await QuoteRequest.findByIdAndUpdate(
-      req.params.id, 
-      { status }, 
+      req.params.id,
+      { status },
       { new: true, runValidators: true }
     );
 
@@ -84,7 +84,10 @@ export const deleteQuoteRequest = async (req: Request, res: Response) => {
 // @access  Private/Admin
 export const getConvertedQuotes = async (req: Request, res: Response) => {
   try {
-    const quotes = await QuoteRequest.find({ status: { $regex: /^converted$/i } }).sort({ updatedAt: -1 });
+    const quotes = await QuoteRequest.find({
+      status: { $in: ['converted', 'shipped', 'Converted', 'Shipped'] }
+    }).sort({ updatedAt: -1 });
+    console.log(`Fetched ${quotes.length} converted/shipped quotes. Statuses: ${quotes.map(q => q.status).join(', ')}`);
     res.status(200).json({ success: true, count: quotes.length, data: quotes });
   } catch (error: any) {
     res.status(500).json({ success: false, message: 'Server Error', error: error.message });

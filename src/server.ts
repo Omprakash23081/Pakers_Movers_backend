@@ -16,7 +16,7 @@ import pricingRoutes from './routes/pricingRoutes';
 dotenv.config();
 
 const app: Express = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -33,25 +33,29 @@ app.use('/api/stats', statsRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/pricing', pricingRoutes);
 
-// Database Connection
-const connectDB = async () => {
-    try {
-        const conn = await mongoose.connect(process.env.MONGODB_URI as string);
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
-    } catch (error: any) {
-        console.error(`Error: ${error.message}`);
-        process.exit(1);
-    }
-};
-
-connectDB();
-
 // Basic Route
 app.get('/', (req: Request, res: Response) => {
     res.send('SSD Packers & Movers API is running...');
 });
 
-// Start Server
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-});
+// Database Connection + Server Start
+const startServer = async () => {
+    try {
+
+        await mongoose.connect(process.env.MONGODB_URI as string);
+
+        console.log('MongoDB Connected');
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+
+    } catch (error: any) {
+
+        console.error('Database connection failed:', error.message);
+        process.exit(1);
+
+    }
+};
+
+startServer();
