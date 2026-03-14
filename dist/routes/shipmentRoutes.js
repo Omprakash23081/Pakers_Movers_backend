@@ -7,9 +7,11 @@ const express_1 = __importDefault(require("express"));
 const shipmentController_1 = require("../controllers/shipmentController");
 const authMiddleware_1 = require("../middleware/authMiddleware");
 const router = express_1.default.Router();
+router.get('/whatsapp/status', authMiddleware_1.protect, shipmentController_1.getWhatsAppStatus);
 router.route('/')
     .post(authMiddleware_1.protect, shipmentController_1.createShipment)
     .get(authMiddleware_1.protect, shipmentController_1.getShipments);
+router.post('/send-whatsapp', authMiddleware_1.protect, shipmentController_1.sendWhatsAppMessage);
 router.route('/track/:id')
     .get(shipmentController_1.trackShipment); // Public
 router.route('/:id')

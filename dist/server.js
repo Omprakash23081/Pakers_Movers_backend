@@ -16,6 +16,7 @@ const statsRoutes_1 = __importDefault(require("./routes/statsRoutes"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const pricingRoutes_1 = __importDefault(require("./routes/pricingRoutes"));
 dotenv_1.default.config();
+console.log("server is running");
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 5000;
 // Middleware
@@ -38,6 +39,58 @@ app.get('/', (req, res) => {
 // Health check
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK' });
+});
+const whatsappService_1 = require("./services/whatsappService");
+// QR Code for browser scanning
+app.get('/qr', (req, res) => {
+    const isReady = whatsappService_1.whatsappService.isReady();
+    const qrDataURL = whatsappService_1.whatsappService.getLatestQR();
+    if (isReady) {
+        return res.status(200).send(`
+            <html>
+                <body style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; font-family:sans-serif; background:#f0f2f5;">
+                    <div style="background:white; padding:40px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); text-align:center;">
+                        <h1 style="color:#25d366;">✅ WhatsApp Connected</h1>
+                        <p>Your session is active and ready to send messages.</p>
+                        <button onclick="location.href='/'" style="margin-top:20px; padding:10px 20px; background:#25d366; color:white; border:none; border-radius:5px; cursor:pointer;">Go to Dashboard</button>
+                    </div>
+                </body>
+            </html>
+        `);
+    }
+    if (!qrDataURL) {
+        return res.status(200).send(`
+            <html>
+                <body style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; font-family:sans-serif; background:#f0f2f5;">
+                    <div style="background:white; padding:40px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); text-align:center;">
+                        <h1 style="color:#54656f;">⏳ Initializing WhatsApp...</h1>
+                        <p>Generating a new QR code. Please wait.</p>
+                        <p style="font-size:12px; color:#8696a0;">The QR code will appear here automatically.</p>
+                        <script>setTimeout(() => location.reload(), 3000);</script>
+                    </div>
+                </body>
+            </html>
+        `);
+    }
+    res.status(200).send(`
+        <html>
+            <body style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; font-family:sans-serif; background:#f0f2f5; margin:0;">
+                <div style="background:white; padding:40px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); text-align:center; max-width:400px;">
+                    <h1 style="color:#25d366; margin-bottom:10px;">SSD Packers & Movers</h1>
+                    <h2 style="margin-top:0; color:#54656f;">WhatsApp Session Scan</h2>
+                    <p style="color:#54656f;">Open WhatsApp on your phone and scan this code:</p>
+                    <div style="margin:30px 0; padding:15px; border:1px solid #e1e9eb; display:inline-block; background:white; border-radius:8px;">
+                        <img src="${qrDataURL}" width="300" height="300" alt="WhatsApp QR Code" style="display:block;" />
+                    </div>
+                    <p style="font-size:14px; color:#8696a0;">This QR code will update automatically when a new session is requested.</p>
+                    <script>
+                        // Auto refresh every 45 seconds to catch new QR codes
+                        setTimeout(() => location.reload(), 45000);
+                    </script>
+                </div>
+            </body>
+        </html>
+    `);
 });
 // Error protection
 process.on('unhandledRejection', (err) => {

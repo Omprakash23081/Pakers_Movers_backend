@@ -29,12 +29,14 @@ const client = new Client({
 
 // Flag to track client readiness and store latest QR
 let isClientReady = false;
+let latestQRCode: string | null = null;
 let latestQRCodeDataURL: string | null = null;
 
 client.on("qr", async (qr) => {
   console.log("=========================================");
   console.log("📢 SCAN QR CODE FOR WHATSAPP SESSION:");
   console.log("=========================================");
+  latestQRCode = qr;
   qrcode.generate(qr, { small: true });
   
   try {
@@ -48,6 +50,8 @@ client.on("qr", async (qr) => {
 
 client.on("ready", () => {
   isClientReady = true;
+  latestQRCode = null;
+  latestQRCodeDataURL = null;
   console.log("✅ WhatsApp client is READY and CONNECTED");
 });
 
@@ -58,6 +62,8 @@ client.on("auth_failure", (msg) => {
 
 client.on("disconnected", (reason) => {
   isClientReady = false;
+  latestQRCode = null;
+  latestQRCodeDataURL = null;
   console.error("❌ WhatsApp client DISCONNECTED:", reason);
   console.log("🔄 Attempting to reconnect...");
   client.initialize().catch(err => {
@@ -73,6 +79,11 @@ client.initialize().catch(err => {
  * Service to handle automated WhatsApp notifications
  */
 export const whatsappService = {
+  /**
+   * Get the latest raw QR Code string
+   */
+  getLatestRawQR: () => latestQRCode,
+
   /**
    * Get the latest QR Code Data URL
    */
