@@ -100,7 +100,7 @@ export const whatsappService = {
       `🏁 *To:* ${shipment.destination}\n` +
       `👤 *Driver:* ${shipment.driverName || 'Assigned'} (${shipment.driverPhone || 'N/A'})\n` +
       `🚛 *Vehicle:* ${shipment.vehicleNumber || 'N/A'}\n\n` +
-      `🔗 *Track Live Status:* \nhttps://SSD-Packers-Movers.com/track?id=${shipment.trackingId}\n\n` +
+      `🔗 *Track Live Status:* \nhttps://pakers-movers.netlify.app/track?id=${shipment.trackingId}\n\n` +
       `Thank you for trust in SSD!`;
 
     try {
