@@ -4,6 +4,12 @@ import { IShipment } from "../models/Shipment";
 
 const { Client, LocalAuth } = pkg;
 
+// Diagnostic logs for Puppeteer on Render
+console.log("🔍 Puppeteer Environment Check:");
+console.log("- NODE_ENV:", process.env.NODE_ENV);
+console.log("- PUPPETEER_CACHE_DIR:", process.env.PUPPETEER_CACHE_DIR);
+console.log("- __dirname:", __dirname);
+
 // Initialize WhatsApp client
 const client = new Client({
   authStrategy: new LocalAuth(),
