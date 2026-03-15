@@ -1,76 +1,73 @@
-import pkg from "whatsapp-web.js";
+import makeWASocket, { DisconnectReason, useMultiFileAuthState, fetchLatestBaileysVersion } from '@whiskeysockets/baileys';
+import { Boom } from '@hapi/boom';
 import qrcode from "qrcode-terminal";
 import QRCode from "qrcode";
 import { IShipment } from "../models/Shipment";
-
-const { Client, LocalAuth } = pkg;
-
-// Initialize WhatsApp client with production-safe configuration
-const client = new Client({
-  authStrategy: new LocalAuth({
-    clientId: "main-session",
-    dataPath: "./sessions"
-  }),
-  puppeteer: {
-    headless: true,
-    timeout: 0,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-accelerated-2d-canvas",
-      "--no-first-run",
-      "--disable-gpu",
-      "--disable-extensions"
-    ],
-  }
-});
 
 // Flag to track client readiness and store latest QR
 let isClientReady = false;
 let latestQRCode: string | null = null;
 let latestQRCodeDataURL: string | null = null;
+let sock: ReturnType<typeof makeWASocket> | null = null;
 
-client.on("qr", async (qr) => {
-  console.log("=========================================");
-  console.log("📢 SCAN QR CODE FOR WHATSAPP SESSION:");
-  console.log("=========================================");
-  latestQRCode = qr;
-  qrcode.generate(qr, { small: true });
-  
-  try {
-    // Also generate a DataURL for browser display
-    latestQRCodeDataURL = await QRCode.toDataURL(qr);
-    console.log("✅ QR Code DataURL generated for browser access");
-  } catch (err) {
-    console.error("❌ Failed to generate QR DataURL:", err);
-  }
-});
+async function connectToWhatsApp() {
+    const { state, saveCreds } = await useMultiFileAuthState('./auth_info_baileys');
+    const { version, isLatest } = await fetchLatestBaileysVersion();
+    console.log(`using WA v${version.join('.')}, isLatest: ${isLatest}`);
 
-client.on("ready", () => {
-  isClientReady = true;
-  latestQRCode = null;
-  latestQRCodeDataURL = null;
-  console.log("✅ WhatsApp client is READY and CONNECTED");
-});
+    sock = makeWASocket({
+        version,
+        auth: state,
+        printQRInTerminal: false, // We handle it manually to get DataURL
+        syncFullHistory: false, // Don't download entire chat history
+        markOnlineOnConnect: true,
+        generateHighQualityLinkPreview: false,
+    });
 
-client.on("auth_failure", (msg) => {
-  isClientReady = false;
-  console.error("❌ WhatsApp authentication FAILED:", msg);
-});
+    sock.ev.on('creds.update', saveCreds);
 
-client.on("disconnected", (reason) => {
-  isClientReady = false;
-  latestQRCode = null;
-  latestQRCodeDataURL = null;
-  console.error("❌ WhatsApp client DISCONNECTED:", reason);
-  console.log("🔄 Attempting to reconnect...");
-  client.initialize().catch(err => {
-    console.error("❌ Reconnection initialization failed:", err);
-  });
-});
+    sock.ev.on('connection.update', async (update) => {
+        const { connection, lastDisconnect, qr } = update;
 
-client.initialize().catch(err => {
+        if (qr) {
+            console.log("=========================================");
+            console.log("📢 SCAN QR CODE FOR WHATSAPP SESSION:");
+            console.log("=========================================");
+            latestQRCode = qr;
+            qrcode.generate(qr, { small: true });
+            
+            try {
+                // Generate a DataURL for browser display
+                latestQRCodeDataURL = await QRCode.toDataURL(qr);
+                console.log("✅ QR Code DataURL generated for browser access");
+            } catch (err) {
+                console.error("❌ Failed to generate QR DataURL:", err);
+            }
+        }
+
+        if (connection === 'close') {
+            isClientReady = false;
+            // reconnect if not logged out
+            const shouldReconnect = (lastDisconnect?.error as Boom)?.output?.statusCode !== DisconnectReason.loggedOut;
+            console.log('❌ Connection closed due to ', lastDisconnect?.error, ', reconnecting ', shouldReconnect);
+            
+            if (shouldReconnect) {
+                connectToWhatsApp();
+            } else {
+                 console.log("⚠️ You have been logged out. Please delete the auth_info_baileys folder and restart the server to scan QR again.");
+            }
+        } else if (connection === 'open') {
+            isClientReady = true;
+            latestQRCode = null;
+            latestQRCodeDataURL = null;
+            console.log('✅ WhatsApp client is READY and CONNECTED');
+        }
+    });
+
+}
+
+// Initialize the connection asynchronously
+connectToWhatsApp().catch(err => {
   console.error("❌ Failed to initialize WhatsApp client:", err);
 });
 
@@ -97,14 +94,14 @@ export const whatsappService = {
    * Send a custom WhatsApp message to any number
    */
   sendCustomMessage: async (chatId: string, message: string) => {
-    if (!isClientReady) {
-      console.log("⚠️ Cannot send WhatsApp: Client is not ready");
+    if (!isClientReady || !sock) {
+      console.log("⚠️ Cannot send WhatsApp: Client is not open");
       return false;
     }
 
     try {
       console.log(`📤 Attempting to send custom WhatsApp message to ${chatId}...`);
-      await client.sendMessage(chatId, message);
+      await sock.sendMessage(chatId, { text: message });
       console.log(`✅ Custom WhatsApp message sent successfully to ${chatId}`);
       return true;
     } catch (error: any) {
@@ -117,12 +114,12 @@ export const whatsappService = {
    * Send a WhatsApp message with shipment details
    */
   sendShipmentDetails: async (shipment: IShipment) => {
-    if (!isClientReady) {
-      console.log("⚠️ Cannot send WhatsApp: Client is not ready");
+    if (!isClientReady || !sock) {
+      console.log("⚠️ Cannot send WhatsApp: Client is not open");
       return false;
     }
 
-    // Format number: should be 919876543210@c.us
+    // Format number: should be 919876543210@s.whatsapp.net for baileys
     // Removing any non-digit characters
     let cleanPhone = shipment.customerPhone.replace(/\D/g, '');
 
@@ -136,10 +133,7 @@ export const whatsappService = {
       cleanPhone = '91' + cleanPhone;
     }
 
-    // If it starts with 91 and is 12 digits, it's already correct
-    // If it's longer than 12, it might have international prefixes, leave as is but ensure it's digits
-
-    const number = cleanPhone + "@c.us";
+    const number = cleanPhone + "@s.whatsapp.net"; // Format requirement for baileys
 
    const message =
 `🚚 *SSD Packers & Movers*
@@ -178,7 +172,7 @@ We will keep you updated on your shipment status.`;
 
     try {
       console.log(`📤 Attempting to send WhatsApp message to ${number}...`);
-      await client.sendMessage(number, message);
+      await sock.sendMessage(number, { text: message });
       console.log(`✅ WhatsApp message sent successfully to ${number}`);
       return true;
     } catch (error: any) {
