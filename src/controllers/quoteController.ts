@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import QuoteRequest from '../models/QuoteRequest';
+import { notificationService } from '../services/notificationService';
 
 // @desc    Create a new quote request
 // @route   POST /api/quotes
@@ -19,6 +20,9 @@ export const createQuoteRequest = async (req: Request, res: Response) => {
       serviceType,
       message,
     });
+
+    // Trigger notification to admin
+    await notificationService.notifyInquiryCreated(newQuote);
 
     res.status(201).json({
       success: true,

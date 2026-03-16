@@ -3,6 +3,7 @@ import { Boom } from '@hapi/boom';
 import qrcode from "qrcode-terminal";
 import QRCode from "qrcode";
 import { IShipment } from "../models/Shipment";
+import { IQuoteRequest } from "../models/QuoteRequest";
 
 // Flag to track client readiness and store latest QR
 let isClientReady = false;
@@ -119,69 +120,126 @@ export const whatsappService = {
       return false;
     }
 
-    // Format number: should be 919876543210@s.whatsapp.net for baileys
-    // Removing any non-digit characters
     let cleanPhone = shipment.customerPhone.replace(/\D/g, '');
+    if (cleanPhone.startsWith('0')) cleanPhone = cleanPhone.substring(1);
+    if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
 
-    // Handle leading zeros often found in copied numbers
-    if (cleanPhone.startsWith('0')) {
-      cleanPhone = cleanPhone.substring(1);
-    }
-
-    // If it's a 10 digit number, assume it's Indian and prefix with 91
-    if (cleanPhone.length === 10) {
-      cleanPhone = '91' + cleanPhone;
-    }
-
-    const number = cleanPhone + "@s.whatsapp.net"; // Format requirement for baileys
+    const number = cleanPhone + "@s.whatsapp.net";
 
     const message =
-      `🚚 *SunitaCargo PACKERS & MOVERS*
+      `📦 *Sunita Cargo Packers & Movers*
+      
+*Shipment Booked Successfully*
+━━━━━━━━━━━━━━━━━━
 
-━━━━━━━━━━━━━━━
-✅ *Shipment Confirmed*
-━━━━━━━━━━━━━━━
+Hello *${shipment.customerName}*,
 
-Hello *${shipment.customerName}* 👋
+Thank you for choosing *Sunita Cargo Packers & Movers*. Your shipment has been recorded and is now in our system.
 
-Your shipment has been successfully created and is now being processed.
+🆔 *Tracking ID:* ${shipment.trackingId}
+📍 *Origin:* ${shipment.origin}
+🏁 *Destination:* ${shipment.destination}
 
-📦 *Tracking Details*
-• *Tracking ID:* ${shipment.trackingId}
+🚛 *Vehicle Details:*
+• *Driver:* ${shipment.driverName || 'Assigning...'}
+• *Vehicle:* ${shipment.vehicleNumber || 'Wait for update'}
 
-${shipment.locationLink ? `📍 *Live Location*\n${shipment.locationLink}\n` : ''}
-📍 *Pickup Location*  
-${shipment.origin}
+🔗 *Track Your Live Shipment:*
+https://sunitacargopackersmovers.com/track?id=${shipment.trackingId}
 
-🏁 *Delivery Location*  
-${shipment.destination}
-
-🚛 *Transport Information*
-• *Driver:* ${shipment.driverName || 'To be assigned'}
-• *Contact:* ${shipment.driverPhone || 'Will be updated soon'}
-• *Vehicle:* ${shipment.vehicleNumber || 'Pending'}
-
-━━━━━━━━━━━━━━━
-🔎 *Track Your Shipment*
-https://pakers-movers.netlify.app/track?id=${shipment.trackingId}
-━━━━━━━━━━━━━━━
-
-Thank you for choosing  
-*SunitaCargo PACKERS & MOVERS* 🙏
-
-We will keep you updated on your shipment status.
-
-📍 *Nagpur Head Office*
-5X6X+CJQ, Khadgaon Rd, Sariputra Nagar, Tekdi, Wadi, Nagpur, Maharashtra 440023
-🔗 https://maps.google.com/?q=5X6X%2BCJQ+Nagpur`;
+━━━━━━━━━━━━━━━━━━
+📞 *Support:* +91 73876 61300
+📧 *Email:* info.sunitacargopackersmovers@gmail.com
+🏢 *H.O:* Nagpur, Maharashtra
+_Reliable. Safe. Fast._`;
 
     try {
-      console.log(`📤 Attempting to send WhatsApp message to ${number}...`);
+      console.log(`📤 Sending Booking ID ${shipment.trackingId} to ${number}...`);
       await sock.sendMessage(number, { text: message });
-      console.log(`✅ WhatsApp message sent successfully to ${number}`);
       return true;
     } catch (error: any) {
       console.log("❌ WhatsApp send failed:", error.message || error);
+      return false;
+    }
+  },
+
+  /**
+   * Send status update notification
+   */
+  sendShipmentUpdate: async (shipment: IShipment, location: string, statusText: string) => {
+    if (!isClientReady || !sock) return false;
+
+    let cleanPhone = shipment.customerPhone.replace(/\D/g, '');
+    if (cleanPhone.startsWith('0')) cleanPhone = cleanPhone.substring(1);
+    if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
+
+    const number = cleanPhone + "@s.whatsapp.net";
+
+    const message =
+      `🚚 *Transit Update: ${shipment.trackingId}*
+━━━━━━━━━━━━━━━━━━
+
+Hello *${shipment.customerName}*,
+
+There is a new update on your shipment:
+
+📍 *Current Location:* ${location}
+📝 *Status:* ${statusText}
+
+🔗 *Live Tracking:*
+https://sunitacargopackersmovers.com/track?id=${shipment.trackingId}
+
+━━━━━━━━━━━━━━━━━━
+*Sunita Cargo Packers & Movers*`;
+
+    try {
+      await sock.sendMessage(number, { text: message });
+      return true;
+    } catch (error: any) {
+      console.log("❌ Update notification failed:", error.message);
+      return false;
+    }
+  },
+
+  /**
+   * Send a WhatsApp message to admin with new inquiry details
+   */
+  sendInquiryToAdmin: async (adminPhone: string, inquiry: IQuoteRequest) => {
+    if (!isClientReady || !sock) {
+      console.log("⚠️ Cannot send WhatsApp to Admin: Client is not open");
+      return false;
+    }
+
+    // Format admin number
+    let cleanPhone = adminPhone.replace(/\D/g, '');
+    if (cleanPhone.startsWith('0')) cleanPhone = cleanPhone.substring(1);
+    if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
+
+    const number = cleanPhone + "@s.whatsapp.net";
+
+    const message =
+      `🔔 *NEW INQUIRY RECEIVED* 🔔
+━━━━━━━━━━━━━━━━
+👤 *Customer:* ${inquiry.firstName} ${inquiry.lastName || ''}
+📞 *Phone:* ${inquiry.phone}
+📧 *Email:* ${inquiry.email || 'N/A'}
+
+📍 *From:* ${inquiry.movingFrom || 'N/A'}
+🏁 *To:* ${inquiry.movingTo || 'N/A'}
+🛠 *Service:* ${inquiry.serviceType || 'Inquiry'}
+
+💬 *Message:*
+${inquiry.message || 'No additional message.'}
+━━━━━━━━━━━━━━━━
+Generated via Website Form`;
+
+    try {
+      console.log(`📤 Attempting to notify admin at ${number}...`);
+      await sock.sendMessage(number, { text: message });
+      console.log(`✅ Admin notified successfully via WhatsApp`);
+      return true;
+    } catch (error: any) {
+      console.log("❌ Admin notification failed:", error.message || error);
       return false;
     }
   }

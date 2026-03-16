@@ -36,3 +36,26 @@ export const getMe = async (req: any, res: Response) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const changePassword = async (req: any, res: Response) => {
+  const { currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Incorrect current password' });
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    res.json({ success: true, message: 'Password updated successfully' });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};

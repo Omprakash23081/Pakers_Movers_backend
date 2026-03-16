@@ -143,6 +143,9 @@ export const updateShipmentStatus = async (req: Request, res: Response) => {
         status,
         timestamp: new Date()
       });
+      
+      // Trigger update notification
+      await notificationService.notifyShipmentUpdated(shipment, location, status);
     }
 
     await shipment.save();

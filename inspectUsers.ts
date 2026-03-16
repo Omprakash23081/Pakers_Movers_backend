@@ -9,6 +9,9 @@ const inspectUsers = async () => {
         console.log('MongoDB Connected');
         
         const db = mongoose.connection.db;
+        if (!db) {
+            throw new Error('Database connection not established');
+        }
         const users = await db.collection('users').find().toArray();
         console.log(`Total Users in 'users' collection: ${users.length}`);
         
