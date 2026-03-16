@@ -11,58 +11,58 @@ let latestQRCodeDataURL: string | null = null;
 let sock: ReturnType<typeof makeWASocket> | null = null;
 
 async function connectToWhatsApp() {
-    const { state, saveCreds } = await useMultiFileAuthState('./auth_info_baileys');
-    const { version, isLatest } = await fetchLatestBaileysVersion();
-    console.log(`using WA v${version.join('.')}, isLatest: ${isLatest}`);
+  const { state, saveCreds } = await useMultiFileAuthState('./auth_info_baileys');
+  const { version, isLatest } = await fetchLatestBaileysVersion();
+  console.log(`using WA v${version.join('.')}, isLatest: ${isLatest}`);
 
-    sock = makeWASocket({
-        version,
-        auth: state,
-        printQRInTerminal: false, // We handle it manually to get DataURL
-        syncFullHistory: false, // Don't download entire chat history
-        markOnlineOnConnect: true,
-        generateHighQualityLinkPreview: false,
-    });
+  sock = makeWASocket({
+    version,
+    auth: state,
+    printQRInTerminal: false, // We handle it manually to get DataURL
+    syncFullHistory: false, // Don't download entire chat history
+    markOnlineOnConnect: true,
+    generateHighQualityLinkPreview: false,
+  });
 
-    sock.ev.on('creds.update', saveCreds);
+  sock.ev.on('creds.update', saveCreds);
 
-    sock.ev.on('connection.update', async (update) => {
-        const { connection, lastDisconnect, qr } = update;
+  sock.ev.on('connection.update', async (update) => {
+    const { connection, lastDisconnect, qr } = update;
 
-        if (qr) {
-            console.log("=========================================");
-            console.log("📢 SCAN QR CODE FOR WHATSAPP SESSION:");
-            console.log("=========================================");
-            latestQRCode = qr;
-            qrcode.generate(qr, { small: true });
-            
-            try {
-                // Generate a DataURL for browser display
-                latestQRCodeDataURL = await QRCode.toDataURL(qr);
-                console.log("✅ QR Code DataURL generated for browser access");
-            } catch (err) {
-                console.error("❌ Failed to generate QR DataURL:", err);
-            }
-        }
+    if (qr) {
+      console.log("=========================================");
+      console.log("📢 SCAN QR CODE FOR WHATSAPP SESSION:");
+      console.log("=========================================");
+      latestQRCode = qr;
+      qrcode.generate(qr, { small: true });
 
-        if (connection === 'close') {
-            isClientReady = false;
-            // reconnect if not logged out
-            const shouldReconnect = (lastDisconnect?.error as Boom)?.output?.statusCode !== DisconnectReason.loggedOut;
-            console.log('❌ Connection closed due to ', lastDisconnect?.error, ', reconnecting ', shouldReconnect);
-            
-            if (shouldReconnect) {
-                connectToWhatsApp();
-            } else {
-                 console.log("⚠️ You have been logged out. Please delete the auth_info_baileys folder and restart the server to scan QR again.");
-            }
-        } else if (connection === 'open') {
-            isClientReady = true;
-            latestQRCode = null;
-            latestQRCodeDataURL = null;
-            console.log('✅ WhatsApp client is READY and CONNECTED');
-        }
-    });
+      try {
+        // Generate a DataURL for browser display
+        latestQRCodeDataURL = await QRCode.toDataURL(qr);
+        console.log("✅ QR Code DataURL generated for browser access");
+      } catch (err) {
+        console.error("❌ Failed to generate QR DataURL:", err);
+      }
+    }
+
+    if (connection === 'close') {
+      isClientReady = false;
+      // reconnect if not logged out
+      const shouldReconnect = (lastDisconnect?.error as Boom)?.output?.statusCode !== DisconnectReason.loggedOut;
+      console.log('❌ Connection closed due to ', lastDisconnect?.error, ', reconnecting ', shouldReconnect);
+
+      if (shouldReconnect) {
+        connectToWhatsApp();
+      } else {
+        console.log("⚠️ You have been logged out. Please delete the auth_info_baileys folder and restart the server to scan QR again.");
+      }
+    } else if (connection === 'open') {
+      isClientReady = true;
+      latestQRCode = null;
+      latestQRCodeDataURL = null;
+      console.log('✅ WhatsApp client is READY and CONNECTED');
+    }
+  });
 
 }
 
@@ -135,8 +135,8 @@ export const whatsappService = {
 
     const number = cleanPhone + "@s.whatsapp.net"; // Format requirement for baileys
 
-   const message =
-`🚚 *SSD Packers & Movers*
+    const message =
+      `🚚 *SunitaCargo PACKERS & MOVERS*
 
 ━━━━━━━━━━━━━━━
 ✅ *Shipment Confirmed*
@@ -149,6 +149,7 @@ Your shipment has been successfully created and is now being processed.
 📦 *Tracking Details*
 • *Tracking ID:* ${shipment.trackingId}
 
+${shipment.locationLink ? `📍 *Live Location*\n${shipment.locationLink}\n` : ''}
 📍 *Pickup Location*  
 ${shipment.origin}
 
@@ -166,9 +167,13 @@ https://pakers-movers.netlify.app/track?id=${shipment.trackingId}
 ━━━━━━━━━━━━━━━
 
 Thank you for choosing  
-*SSD Packers & Movers* 🙏
+*SunitaCargo PACKERS & MOVERS* 🙏
 
-We will keep you updated on your shipment status.`;
+We will keep you updated on your shipment status.
+
+📍 *Nagpur Head Office*
+5X6X+CJQ, Khadgaon Rd, Sariputra Nagar, Tekdi, Wadi, Nagpur, Maharashtra 440023
+🔗 https://maps.google.com/?q=5X6X%2BCJQ+Nagpur`;
 
     try {
       console.log(`📤 Attempting to send WhatsApp message to ${number}...`);

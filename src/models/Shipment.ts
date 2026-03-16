@@ -19,6 +19,7 @@ export interface IShipment extends Document {
   driverName?: string;
   driverPhone?: string;
   vehicleNumber?: string;
+  locationLink?: string;
   createdAt: Date;
 }
 
@@ -42,7 +43,8 @@ const ShipmentSchema: Schema = new Schema({
   isDeleted: { type: Boolean, default: false },
   driverName: { type: String },
   driverPhone: { type: String },
-  vehicleNumber: { type: String }
+  vehicleNumber: { type: String },
+  locationLink: { type: String }
 }, { timestamps: true });
 
 export default mongoose.models.Shipment || mongoose.model<IShipment>('Shipment', ShipmentSchema);

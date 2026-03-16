@@ -58,7 +58,7 @@ export const createShipment = async (req: Request, res: Response) => {
   try {
     const {
       trackingId, customerName, customerPhone, origin, destination,
-      estimatedDelivery, quoteId, driverName, driverPhone, vehicleNumber
+      estimatedDelivery, quoteId, driverName, driverPhone, vehicleNumber, locationLink
     } = req.body;
 
     const newShipment = await Shipment.create({
@@ -71,6 +71,7 @@ export const createShipment = async (req: Request, res: Response) => {
       driverName,
       driverPhone,
       vehicleNumber,
+      locationLink,
       updates: [{
         location: origin,
         status: 'Shipment booked and verified',
@@ -124,7 +125,7 @@ export const trackShipment = async (req: Request, res: Response) => {
 // @access  Private/Admin
 export const updateShipmentStatus = async (req: Request, res: Response) => {
   try {
-    const { location, status, currentStatus } = req.body;
+    const { location, status, currentStatus, locationLink } = req.body;
 
     const shipment = await Shipment.findById(req.params.id);
 
@@ -133,6 +134,7 @@ export const updateShipmentStatus = async (req: Request, res: Response) => {
     }
 
     if (currentStatus) shipment.currentStatus = currentStatus;
+    if (locationLink) shipment.locationLink = locationLink;
 
     // Add new update to tracking history
     if (location && status) {
