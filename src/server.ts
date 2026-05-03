@@ -11,6 +11,7 @@ import shipmentRoutes from './routes/shipmentRoutes';
 import statsRoutes from './routes/statsRoutes';
 import userRoutes from './routes/userRoutes';
 import pricingRoutes from './routes/pricingRoutes';
+import feedbackRoutes from './routes/feedbackRoutes';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use('/api/shipments', shipmentRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/pricing', pricingRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 // Root route
 app.get('/', (req: Request, res: Response) => {
