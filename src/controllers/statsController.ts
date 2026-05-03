@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import QuoteRequest from '../models/QuoteRequest';
 import Shipment from '../models/Shipment';
+import Feedback from '../models/Feedback';
 
 export const getDashboardStats = async (req: Request, res: Response) => {
   try {
     const totalQuotes = await QuoteRequest.countDocuments();
     const activeShipments = await Shipment.countDocuments({ currentStatus: { $ne: 'delivered' } });
     const deliveredShipments = await Shipment.countDocuments({ currentStatus: 'delivered' });
+    const totalFeedback = await Feedback.countDocuments();
     
     // Aggregations for charts
     const serviceDistribution = await QuoteRequest.aggregate([
@@ -26,6 +28,7 @@ export const getDashboardStats = async (req: Request, res: Response) => {
         totalQuotes,
         activeShipments,
         deliveredShipments,
+        totalFeedback,
         serviceDistribution,
         statusBreakdown
       },

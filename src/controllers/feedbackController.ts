@@ -3,7 +3,13 @@ import Feedback from '../models/Feedback';
 
 export const createFeedback = async (req: Request, res: Response) => {
   try {
-    const { fullName, email, phone, rating, message } = req.body;
+    const { fullName, email, phone, rating, message } = req.body as {
+      fullName: string;
+      email?: string;
+      phone: string;
+      rating: number;
+      message: string;
+    };
 
     const newFeedback = new Feedback({
       fullName,
