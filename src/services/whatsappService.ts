@@ -1,4 +1,3 @@
-import makeWASocket, { DisconnectReason, useMultiFileAuthState, fetchLatestBaileysVersion } from '@whiskeysockets/baileys';
 import { Boom } from '@hapi/boom';
 import qrcode from "qrcode-terminal";
 import QRCode from "qrcode";
@@ -9,9 +8,13 @@ import { IQuoteRequest } from "../models/QuoteRequest";
 let isClientReady = false;
 let latestQRCode: string | null = null;
 let latestQRCodeDataURL: string | null = null;
-let sock: ReturnType<typeof makeWASocket> | null = null;
+let sock: any = null;
 
 async function connectToWhatsApp() {
+  const baileys = await import('@whiskeysockets/baileys');
+  const makeWASocket = baileys.default;
+  const { DisconnectReason, useMultiFileAuthState, fetchLatestBaileysVersion } = baileys;
+
   const { state, saveCreds } = await useMultiFileAuthState('./auth_info_baileys');
   const { version, isLatest } = await fetchLatestBaileysVersion();
   console.log(`using WA v${version.join('.')}, isLatest: ${isLatest}`);
@@ -27,7 +30,7 @@ async function connectToWhatsApp() {
 
   sock.ev.on('creds.update', saveCreds);
 
-  sock.ev.on('connection.update', async (update) => {
+  sock.ev.on('connection.update', async (update: any) => {
     const { connection, lastDisconnect, qr } = update;
 
     if (qr) {
