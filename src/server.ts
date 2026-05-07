@@ -35,7 +35,10 @@ app.use('/api/shipments', shipmentRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/pricing', pricingRoutes);
+console.log('Registering feedback routes...');
+if (!feedbackRoutes) console.error('ERROR: feedbackRoutes is undefined!');
 app.use('/api/feedback', feedbackRoutes);
+console.log('Feedback routes registered successfully.');
 
 // Root route
 app.get('/', (req: Request, res: Response) => {
