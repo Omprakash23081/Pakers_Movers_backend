@@ -48,11 +48,23 @@ export const getFeedbacks = async (req: Request, res: Response) => {
       feedbacks
     });
   } catch (error: any) {
-    console.error('Error fetching feedbacks:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch feedback list.',
-      error: error.message
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+export const deleteFeedback = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const feedback = await Feedback.findByIdAndDelete(id);
+    
+    if (!feedback) {
+      return res.status(404).json({ success: false, message: 'Feedback not found' });
+    }
+    
+    res.status(200).json({ success: true, message: 'Feedback deleted successfully' });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
