@@ -9,7 +9,6 @@ import authRoutes from './routes/authRoutes';
 import quoteRoutes from './routes/quoteRoutes';
 import shipmentRoutes from './routes/shipmentRoutes';
 import statsRoutes from './routes/statsRoutes';
-import userRoutes from './routes/userRoutes';
 import pricingRoutes from './routes/pricingRoutes';
 import feedbackRoutes from './routes/feedbackRoutes';
 
@@ -22,9 +21,29 @@ const app: Express = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+const allowedOrigins = [
+    'https://adminssd.netlify.app',
+    'https://sunitacargopackersmovers.com',
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:5173'
+];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(helmet());
 app.use(morgan('dev'));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -33,7 +52,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/quotes', quoteRoutes);
 app.use('/api/shipments', shipmentRoutes);
 app.use('/api/stats', statsRoutes);
-app.use('/api/users', userRoutes);
 app.use('/api/pricing', pricingRoutes);
 console.log('Registering feedback routes...');
 if (!feedbackRoutes) console.error('ERROR: feedbackRoutes is undefined!');
